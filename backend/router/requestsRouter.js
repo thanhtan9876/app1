@@ -7,7 +7,7 @@ router.route('/login')
 .get(requestsCtrl.login)
 
 router.route('/register')
-.get(requestsCtrl.register)
+.post(requestsCtrl.register)
 
 router.route('/insertRequests')
 .post(requestsCtrl.insertRequests)

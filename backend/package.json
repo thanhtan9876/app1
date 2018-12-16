@@ -17,6 +17,7 @@
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.23.0",
     "mysql": "^2.16.0",
-    "nodemon": "^1.18.8"
+    "nodemon": "^1.18.8",
+    "randomstring": "^1.1.5"
   }
 }

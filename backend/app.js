@@ -8,7 +8,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/requests', require('./router/requestsRouter.js'));
-app.use('/token', require('./router/tokenRouter.js'));
+//app.use('/token', require('./router/tokenRouter.js'));
 
 var num_port = 5000;
 var port = process.env.port || num_port;
