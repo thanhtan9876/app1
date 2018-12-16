@@ -4,7 +4,7 @@ var requestsCtrl= require('../controller/requestsCtrl')
 var router = express.Router();
 
 router.route('/login')
-.get(requestsCtrl.login)
+.post(requestsCtrl.login)
 
 router.route('/register')
 .post(requestsCtrl.register)

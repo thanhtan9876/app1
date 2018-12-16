@@ -1,10 +1,43 @@
 var requestRepo = require('../repo/requestsRepo.js');
 var jwt = require('jsonwebtoken');
 var moment=require('moment');
+require('dotenv').config();
 var randomstring = require("randomstring");
 
 exports.login = function(req,res) {
-	res.end("ham login");
+	var c=req.body;
+	requestRepo.login(c)
+	.then(rows=>{
+		if(rows.length>0)
+		{
+			var token=generateTokens(rows[0]);
+			res.json({
+				statusCode:1,
+				message:"login susscess!",
+				id:rows[0].ID,
+				refreshToken:rows[0].RefreshToken,
+				accessToken:token,
+				username:rows[0].Username,
+                ID_Roles:rows[0].ID_Roles
+			});
+		}
+		else
+		{
+            res.json({
+				statusCode:0,
+				message:"username or password invalid!!"
+			});
+		}
+	})
+	.catch(err=>{
+		console.log(err);
+		res.json({
+			statusCode:0,
+			message:"login error!",
+			error:err
+		});
+	});
+
 }
 exports.register = function(req,res) {
 	var user=req.body;
