@@ -12,26 +12,41 @@ import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";      
+import TextField from "@material-ui/core/TextField";
+import axios from 'axios'
 class Dashboard extends React.Component {
   state = {
-    value: 0
+    value: 0,
+    username:"",
+    password:""
   };
   
   constructor(props) {
     super(props);
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
-  changeView() {
-      return <Redirect to={'../user'}/>
+  login(state) {
+  axios.post('http://localhost:5000/requests/login', {
+    Username: state.username,
+    Password: state.password
+  })
+  .then(function (response) {
+    if(response.data.statusCode == 1){
+    alert("Đăng nhập thành công")
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+    }
+    else{
+     alert("Sai thông tin đăng nhập")
+    }
+  })
+  .catch(function (error) {
+   alert("Sai thông tin đăng nhập")
+  });
+   
   }
+
   render() {
     const { classes } = this.props;
     return <div>
@@ -44,32 +59,30 @@ class Dashboard extends React.Component {
           <CardBody>
             <GridContainer>
               <GridItem xs={12} sm={12} md={12}>
-                <CustomInput
-                  labelText="Username"
-                  id="username"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                />
+                 <TextField
+                    label="Customer Name"
+                    onChange={event=>this.setState({
+                      username: event.target.value
+                    })}
+                  />
               </GridItem>
             </GridContainer>
 
             <GridContainer>
               <GridItem xs={12} sm={12} md={12}>
-                <CustomInput
-                  labelText="Password"
-                  id="password"
-                  formControlProps={{
-                    fullWidth: true,
-                  }}
-                />
+                <TextField
+                    label="Password"
+                    onChange={event=>this.setState({
+                      password: event.target.value
+                    })}
+                  />
               </GridItem>
             </GridContainer>
            
           </CardBody>
           <CardFooter>
             <Button color="primary"
-            onClick={this.changeView}
+            onClick={()=>this.login(this.state)}
             >Login</Button>
           </CardFooter>
         </Card>
@@ -79,10 +92,6 @@ class Dashboard extends React.Component {
   </div>
   }
 }
-
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(Dashboard);
 const styles = {
