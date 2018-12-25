@@ -18,12 +18,12 @@ exports.login = function(req,res) {
 				refreshToken:rows[0].RefreshToken,
 				accessToken:token,
 				username:rows[0].Username,
-                ID_Roles:rows[0].ID_Roles
+				ID_Roles:rows[0].ID_Roles
 			});
 		}
 		else
 		{
-            res.json({
+			res.json({
 				statusCode:0,
 				message:"username or password invalid!!"
 			});
@@ -46,18 +46,67 @@ exports.register = function(req,res) {
 	requestRepo.register(user)
 	.then(rows=>{
 		res.json({
-				statusCode:1,
-				message:"register susscess!"
-			});
+			statusCode:1,
+			message:"register susscess!"
+		});
 	})
 	.catch(err=>{
 		res.json({
-				statusCode:1,
-				message:"register error!",
-				error:err
-			});
+			statusCode:1,
+			message:"register error!",
+			error:err
+		});
 	});
 
+
+}
+var arr=[];
+exports.checkAccessToken = function(req,res,next){
+	var c=req.body;
+	var token=req.body.accessToken;
+	var ref_token=req.body.refreshToken.toString();
+	if(token){
+		jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+			if(err){
+				if(err.message==='jwt expired')
+				{
+					arr.push(token);
+					var kt=arr.indexOf(token);
+					if(kt>=0){
+						requestRepo.getUserByToken(ref_token)
+						.then(rows=>{
+							var users=rows[0]
+							var newToken=generateTokens(rows[0]);
+							users.newToken=newToken;
+							req.user_token=users;
+							next();
+						})
+						.catch(erro=>{
+							res.json({
+								statusCode:0,
+								message:erro
+							});
+						})
+					}else{
+						res.json({
+								statusCode:0,
+								message:"jwt expired"
+							});
+					}
+				}else
+				{
+					res.json({
+						statusCode:0,
+						message:err
+					});
+				}
+			}else
+			{
+				req.user_token=user;
+				next();
+			}
+		})
+	}
 
 }
 var generateTokens = function(user) {
@@ -65,25 +114,25 @@ var generateTokens = function(user) {
 		user:user
 	}
 	return token = jwt.sign(user_token, process.env.JWT_SECRET, {
-        expiresIn: 60*60 // expires in 1 week
+        expiresIn: 60*60*24 // expires in 1 week
     });
 }
 var createRefreshToken=function(){
-  var str=randomstring.generate({
-    length: 50,
-    charset: 'alphabetic'
-});
-  return str;
+	var str=randomstring.generate({
+		length: 50,
+		charset: 'alphabetic'
+	});
+	return str;
 }
 exports.insertRequests=function(req,res){
 	var request=req.body;
 	request.created_at=moment().unix();
 	requestRepo.insertRequest(request)
 	.then(rows=>{
-			res.json({
-				statusCode:1,
-				message:"insert request susscess!"
-			});
+		res.json({
+			statusCode:1,
+			message:"insert request susscess!"
+		});
 	})
 	.catch(err=>{
 		res.json({
