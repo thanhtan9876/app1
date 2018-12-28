@@ -10,5 +10,5 @@ router.route('/register')
 .post(requestsCtrl.register)
 
 router.route('/insertRequests')
-.post(requestsCtrl.insertRequests)
+.post(requestsCtrl.checkAccessToken,requestsCtrl.insertRequests)
 module.exports = router;
