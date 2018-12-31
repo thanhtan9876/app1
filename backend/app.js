@@ -2,21 +2,68 @@ var express = require('express')
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var jwt = require('jsonwebtoken');
 
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use('/requests', require('./router/requestsRouter.js'));
-//app.use('/token', require('./router/tokenRouter.js'));
 
-var num_port = 5000;
-var port = process.env.port || num_port;
-var server=app.listen(port, () =>{
-    console.log("Link server: "+require("ip").address()+":" + port);
-    console.log("Running server!!!");
+var signupController = require('./controller/signupController');
+var loginController = require('./controller/loginController');
+var userController = require('./controller/userController');
+
+app.get ('/', (req, res) => {
+  res.json({
+    msg: 'Request Receiver'
+  });
 })
 
-app.get("/",(req,res)=>{
-    res.end("WELCOM TO TAN_SERVICE API!!");
+var verifyAccessToken = (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (token) {
+    jwt.verify(token, 'SECRET-BOOKING-CARS-TOKEN', (err, payload) => {
+      if (err) {
+        res.statusCode = 403;
+        res.json({
+          msg: 'INVALID TOKEN',
+          error: err
+        });
+      } else {
+        req.token_payload = payload;
+        next();
+      }
+    })
+  } else {
+    res.statusCode = 403;
+    res.json({
+      msg: `TOKEN DOESN'T EXIST`
+    });
+  }
+}
+
+app.use('/users', verifyAccessToken, userController);
+app.use('/signup', signupController);
+app.use('/login', loginController);
+
+
+
+app.use((req, res, next) => {
+  var err = new Error("Not found");
+  err.status = 404;
+  next(err);
+})
+
+app.use((err, req, res, next) => {
+  console.log(err)
+  res.status(err.status || 500);
+  res.json({
+    'error': err.message
+  });
+})
+
+
+var port = process.env.port || 5000;
+app.listen(port, () => {
+  console.log(`Server is running on ${port}`);
 })

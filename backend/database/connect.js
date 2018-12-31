@@ -7,7 +7,7 @@ exports.load = function(sql) {
             host: 'localhost',
             port: '3306',
             user: 'root',
-            password:'',
+            password:'root',
             database:'booking_cars'
         });
 
@@ -35,7 +35,7 @@ exports.check=function(){
           resolve("connect!!!");
       });
     })
-    
+
 }
 //thưc thi các query insert,update,delete database
 exports.write = function(sql) {
@@ -44,7 +44,7 @@ exports.write = function(sql) {
             host: 'localhost',
             port: '3306',
             user: 'root',
-            password:'',
+            password:'root',
             database:'booking_cars'
         });
 
