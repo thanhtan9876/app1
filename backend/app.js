@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -12,6 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var signupController = require('./controller/signupController');
 var loginController = require('./controller/loginController');
 var userController = require('./controller/userController');
+var requestController = require('./controller/requestsController');
 
 app.get ('/', (req, res) => {
   res.json({
@@ -45,8 +45,7 @@ var verifyAccessToken = (req, res, next) => {
 app.use('/users', verifyAccessToken, userController);
 app.use('/signup', signupController);
 app.use('/login', loginController);
-
-
+app.use('/requests', verifyAccessToken, requestController);
 
 app.use((req, res, next) => {
   var err = new Error("Not found");
@@ -61,7 +60,6 @@ app.use((err, req, res, next) => {
     'error': err.message
   });
 })
-
 
 var port = process.env.port || 5000;
 app.listen(port, () => {

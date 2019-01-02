@@ -63,4 +63,7 @@ export default {
 </script>
 
 <style lang="css">
+  .navbar-nav {
+    text-align: center;
+  }
 </style>

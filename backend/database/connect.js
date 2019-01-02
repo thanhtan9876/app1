@@ -7,7 +7,7 @@ exports.load = function(sql) {
             host: 'localhost',
             port: '3306',
             user: 'root',
-            password:'root',
+            password:'',
             database:'booking_cars'
         });
 
@@ -44,7 +44,7 @@ exports.write = function(sql) {
             host: 'localhost',
             port: '3306',
             user: 'root',
-            password:'root',
+            password:'',
             database:'booking_cars'
         });
 

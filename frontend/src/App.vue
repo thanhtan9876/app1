@@ -5,13 +5,9 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'app',
-  components: {
-    HelloWorld
-  }
+  components: {}
 }
 </script>
 
@@ -20,13 +16,21 @@ export default {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 #nav {
   padding: 30px;
 }
 
+.form-group.required .control-label:after {
+  color: #ff4d4d;
+  content: "*";
+  position: absolute;
+  margin-left: 3px;
+  font-family: 'FontAwesome';
+  font-weight: normal;
+  font-size: 14px;
+}
 #nav a {
   font-weight: bold;
   color: #2c3e50;
