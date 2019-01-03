@@ -14,9 +14,14 @@
         <small v-if="errors.has('phone')" class="form-text text-danger">{{ errors.first('phone') }}</small>
       </div>
       <div class="form-group required col-sm-4 col-md-4 offset-sm-4 offset-md-4">
-        <label class="control-label" for="address" v-bind:class="{'text-danger': (form.addressClass === 'border border-danger')}">Địa chỉ đón khách</label>
-        <input class="form-control" @keyup="checkValidation" ref="txtAddress" id="address" name="address" v-bind:class="form.addressClass" v-validate="'required'" placeholder="Nhập địa chỉ đón khách" v-model="form.address">
-        <small v-if="errors.has('address')" class="form-text text-danger">{{ errors.first('address') }}</small>
+        <label class="control-label" for="nameLocation" v-bind:class="{'text-danger': (form.nameLocationClass === 'border border-danger')}">Địa chỉ đón khách</label>
+        <input class="form-control" @keyup="checkValidation" ref="txtNameLocation" id="nameLocation" name="namelocation" v-bind:class="form.nameLocationClass" v-validate="'required'" placeholder="Nhập địa chỉ đón khách" v-model="form.nameLocation">
+        <small v-if="errors.has('namelocation')" class="form-text text-danger">{{ errors.first('namelocation') }}</small>
+      </div>
+      <div class="form-group required col-sm-4 col-md-4 offset-sm-4 offset-md-4">
+        <label class="control-label" for="finishLocationName" v-bind:class="{'text-danger': (form.finishLocationNameClass === 'border border-danger')}">Địa chỉ trả khách</label>
+        <input class="form-control" @keyup="checkValidation" ref="txtFinishLocationName" id="finishLocationName" name="finishlocationname" v-bind:class="form.finishLocationNameClass" v-validate="'required'" placeholder="Nhập địa chỉ trả khách" v-model="form.finishLocationName">
+        <small v-if="errors.has('finishlocationname')" class="form-text text-danger">{{ errors.first('finishlocationname') }}</small>
       </div>
       <div class="form-group col-sm-4 col-md-4 offset-sm-4 offset-md-4">
         <label for="note">Ghi chú</label>
@@ -40,11 +45,13 @@ export default {
       form: {
         fullName: '',
         phone: '',
-        address: '',
+        nameLocation: '',
+        finishLocationName: '',
         note: '',
         fullNameClass: '',
         phoneClass: '',
-        addressClass: '',
+        nameLocationClass: '',
+        finishLocationNameClass: '',
         noteClass: ''
       },
       request: ''
@@ -72,12 +79,14 @@ export default {
           if (result) {
               var fullname = self.$refs.txtFullName.value.trim();
               var phone = self.$refs.txtPhone.value.trim();
-              var address = self.$refs.txtAddress.value.trim();
+              var nameLocation = self.$refs.txtNameLocation.value.trim();
+              var finishLocationName = self.$refs.txtFinishLocationName.value.trim();
               var note = self.$refs.txtNote.value.trim();
               self.request = {
                 'GuestName': fullname,
                 'GuestTelephone': phone,
-                'NameLocation': address,
+                'NameLocation': nameLocation,
+                'FinishLocationName': finishLocationName,
                 'Note': note
               }
               self.sendRequestToServer();
@@ -98,10 +107,15 @@ export default {
       } else {
         self.form.phoneClass = '';
       }
-      if (self.$validator.errors.has('address')) {
-        self.form.addressClass = 'border border-danger';
+      if (self.$validator.errors.has('namelocation')) {
+        self.form.nameLocationClass = 'border border-danger';
       } else {
-        self.form.addressClass = '';
+        self.form.nameLocationClass = '';
+      }
+      if (self.$validator.errors.has('finishlocationname')) {
+        self.form.finishLocationNameClass = 'border border-danger';
+      } else {
+        self.form.finishLocationNameClass = '';
       }
     },
     sendRequestToServer() {
@@ -134,13 +148,16 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          this.$message({ type: 'success', message: `Ghi nhận request thành công` });
         })
         .catch(err => {
           console.log(err);
+          this.$message({ type: 'error', message: `Gửi request thất bại. Có lỗi xảy ra: ${err}` });
         })
       })
       .catch(err => {
         console.log(err);
+        this.$message({ type: 'error', message: `Gửi request thất bại. Có lỗi xảy ra: ${err}` });
       })
     }
   }
