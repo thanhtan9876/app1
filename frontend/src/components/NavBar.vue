@@ -46,7 +46,8 @@ export default {
         var value = result.data
         this.username = value.Username
       }).catch(err => {
-        this.$message({ type: 'error', message: `Có lỗi xảy ra: ${err}` });
+        this.$message({ type: 'error', message: `Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại` });
+        this.$router.push('/login')
       })
     }
   },
