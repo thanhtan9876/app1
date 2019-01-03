@@ -1,4 +1,4 @@
-const messages = {
+﻿const messages = {
   required: (field) => {
     return `Vui lòng nhập ${field}.`
   }
@@ -7,7 +7,8 @@ const messages = {
 const attributes = {
   fullname: 'họ tên',
   phone: 'số điện thoại',
-  address: 'địa chỉ đón khách'
+  namelocation: 'địa chỉ đón khách',
+  finishlocationname: 'địa chỉ trả khách'
 }
 
 const locale = {
