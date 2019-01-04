@@ -10,14 +10,14 @@
           <el-input style="margin-top: 10px"
             placeholder="Tên tài khoản"
             v-model="inputName">
-            <i slot="prefix" class="el-input__icon glyphicon glyphicon-user"></i>
+            <i slot="prefix" class="el-input__icon fas fa-user"></i>
           </el-input>
 
           <el-input style="margin-top: 10px"
             placeholder="Mật khẩu"
             type="password"
             v-model="inputPass">
-            <i slot="prefix" class="el-input__icon glyphicon glyphicon-lock"></i>
+            <i slot="prefix" class="el-input__icon glyphicon fas fa-lock"></i>
           </el-input>
 
           <el-alert style="margin-top: 12px"
