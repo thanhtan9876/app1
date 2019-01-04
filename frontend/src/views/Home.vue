@@ -90,6 +90,7 @@ export default {
                 'Note': note
               }
               self.sendRequestToServer();
+              self.sendRequestToRequestManagement();
           } else {
             self.checkValidation();
           }
@@ -158,6 +159,28 @@ export default {
       .catch(err => {
         console.log(err);
         this.$message({ type: 'error', message: `Gửi request thất bại. Có lỗi xảy ra: ${err}` });
+      })
+    },
+    sendRequestToRequestManagement() {
+      var self = this;
+      var url = 'http://localhost:3010/requests';
+      var objToPost = {
+        ID: 1,
+      }
+      axios({
+        method: 'POST',
+        url: url,
+        headers: {
+          'x-access-token': JSON.parse(localStorage.getItem('user')).accessToken
+        },
+        data: objToPost,
+        timeout: 10000
+      })
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
       })
     }
   }
